@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { AlertCircle } from "lucide-react";
 
 interface UploadBoxProps {
@@ -12,6 +12,24 @@ export const UploadBox: React.FC<UploadBoxProps> = ({ onFileSelect }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const handlePaste = (event: ClipboardEvent) => {
+      const imageItem = Array.from(event.clipboardData?.items || []).find((item) => item.type.startsWith("image/"));
+      const pastedImage = imageItem?.getAsFile();
+      if (!pastedImage) return;
+
+      event.preventDefault();
+      const extension = pastedImage.type.split("/")[1] || "png";
+      validateAndHandleFile(new File([pastedImage], `pasted-image.${extension}`, {
+        type: pastedImage.type,
+        lastModified: Date.now(),
+      }));
+    };
+
+    window.addEventListener("paste", handlePaste);
+    return () => window.removeEventListener("paste", handlePaste);
+  }, []);
 
   const validateAndHandleFile = (file: File) => {
     setError(null);
@@ -77,7 +95,7 @@ export const UploadBox: React.FC<UploadBoxProps> = ({ onFileSelect }) => {
         />
 
         <p className="text-sm font-medium text-text-primary">
-          {isDragging ? "Drop image now" : "Drop image here"}
+          {isDragging ? "Drop image now" : "Drop image here or paste an image"}
         </p>
 
         <span className="my-2 text-xs text-text-muted">or</span>

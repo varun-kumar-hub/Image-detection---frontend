@@ -74,9 +74,6 @@ export const Header: React.FC<HeaderProps> = ({
             <div className="w-5 h-5 rounded-full bg-surface-secondary flex items-center justify-center text-[10px] font-mono font-medium text-text-primary border border-border">
               {userName.charAt(0).toUpperCase()}
             </div>
-            <span className="hidden sm:inline font-medium text-xs max-w-[90px] truncate">
-              {userName.split(" ")[0]}
-            </span>
           </Link>
         ) : (
           <Link

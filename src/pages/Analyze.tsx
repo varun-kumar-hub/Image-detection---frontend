@@ -22,7 +22,7 @@ export const Analyze: React.FC = () => {
   const [groundTruth, setGroundTruth] = useState<string | null>(null);
 
   useEffect(() => {
-    const isEvalEnabled = localStorage.getItem("image_detection_evaluation_mode") === "true";
+    const isEvalEnabled = localStorage.getItem("image_detection_backup_mode") === "true" || localStorage.getItem("image_detection_evaluation_mode") === "true";
     setEvaluationModeEnabled(isEvalEnabled);
     setGroundTruth(localStorage.getItem("image_detection_ground_truth"));
 

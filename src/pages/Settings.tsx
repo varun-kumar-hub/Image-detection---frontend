@@ -12,16 +12,16 @@ export const Settings: React.FC<SettingsProps> = ({ darkMode, setDarkMode }) => 
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
 
-  // Evaluation Mode state stored in localStorage
+  // Backup Mode state stored in localStorage
   const [evaluationMode, setEvaluationMode] = useState<boolean>(() => {
-    return localStorage.getItem("image_detection_evaluation_mode") === "true";
+    return localStorage.getItem("image_detection_backup_mode") === "true" || localStorage.getItem("image_detection_evaluation_mode") === "true";
   });
   const [groundTruth, setGroundTruth] = useState<string>(() =>
     localStorage.getItem("image_detection_ground_truth") || ""
   );
 
   useEffect(() => {
-    localStorage.setItem("image_detection_evaluation_mode", evaluationMode ? "true" : "false");
+    localStorage.setItem("image_detection_backup_mode", evaluationMode ? "true" : "false");
   }, [evaluationMode]);
 
   useEffect(() => {
@@ -90,12 +90,12 @@ export const Settings: React.FC<SettingsProps> = ({ darkMode, setDarkMode }) => 
         </div>
       </section>
 
-      {/* 2. Hidden Evaluation Mode (Testing Reference) */}
+      {/* 2. Backup Mode (Private Reference Testing) */}
       <section className="space-y-3">
         <div className="flex items-center justify-between">
           <h2 className="text-xs font-mono uppercase tracking-widest text-text-muted flex items-center gap-1.5">
             <Shield className="h-3.5 w-3.5" />
-            <span>EVALUATION MODE (CONTROLLED TESTING)</span>
+            <span>BACKUP MODE (PRIVATE TESTING)</span>
           </h2>
           <span className="text-[11px] font-mono text-text-muted">
             {evaluationMode ? "Active" : "Disabled"}
@@ -106,7 +106,7 @@ export const Settings: React.FC<SettingsProps> = ({ darkMode, setDarkMode }) => 
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="space-y-1">
               <p className="text-xs font-medium text-text-primary">
-                Ground Truth Testing Reference
+                Backup Mode
               </p>
               <p className="text-xs text-text-secondary leading-relaxed max-w-xl">
                 Optional mode for demonstrating and evaluating the model against images with a known label.

@@ -85,7 +85,7 @@ export const ResultCard: React.FC<ResultCardProps> = ({ result, onAnalyzeAnother
       </div>
 
       {/* 3. Evaluation Reference (ONLY SHOWN IF EVALUATION MODE WAS USED) */}
-      {result.is_evaluation && result.ground_truth && (
+      {false && result.is_evaluation && result.ground_truth && (
         <div className="rounded-lg border border-border bg-surface p-4 space-y-2">
           <div className="flex items-center justify-between">
             <span className="text-[10px] font-mono uppercase tracking-wider text-text-muted">

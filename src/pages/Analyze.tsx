@@ -10,6 +10,7 @@ import type { AnalysisResult } from "../types";
 import { AlertCircle } from "lucide-react";
 
 export const Analyze: React.FC = () => {
+  const persistedImageKey = "image_detection_pending_image";
   const { isAuthenticated } = useAuth();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -23,12 +24,37 @@ export const Analyze: React.FC = () => {
   useEffect(() => {
     const isEvalEnabled = localStorage.getItem("image_detection_evaluation_mode") === "true";
     setEvaluationModeEnabled(isEvalEnabled);
+
+    const savedImage = localStorage.getItem(persistedImageKey);
+    if (savedImage) {
+      try {
+        const parsed = JSON.parse(savedImage) as { name: string; type: string; data: string };
+        fetch(parsed.data)
+          .then((response) => response.blob())
+          .then((blob) => setSelectedFile(new File([blob], parsed.name, { type: parsed.type })))
+          .catch(() => localStorage.removeItem(persistedImageKey));
+      } catch {
+        localStorage.removeItem(persistedImageKey);
+      }
+    }
   }, []);
 
   const handleFileSelect = (file: File) => {
     setSelectedFile(file);
     setError(null);
     setResult(null);
+
+    if (file.size <= 5 * 1024 * 1024) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        localStorage.setItem(persistedImageKey, JSON.stringify({
+          name: file.name,
+          type: file.type,
+          data: reader.result,
+        }));
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleRemove = () => {
@@ -36,6 +62,7 @@ export const Analyze: React.FC = () => {
     setError(null);
     setResult(null);
     setGroundTruth(null);
+    localStorage.removeItem(persistedImageKey);
   };
 
   const handleAnalyze = async () => {
@@ -64,6 +91,7 @@ export const Analyze: React.FC = () => {
     setResult(null);
     setError(null);
     setGroundTruth(null);
+    localStorage.removeItem(persistedImageKey);
   };
 
   const handleSelectSample = async (type: "real" | "ai") => {

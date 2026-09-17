@@ -41,6 +41,11 @@ export const Analyze: React.FC = () => {
   const handleAnalyze = async () => {
     if (!selectedFile) return;
 
+    if (evaluationModeEnabled && !groundTruth) {
+      setError("Select the known label for this image before running evaluation.");
+      return;
+    }
+
     setIsLoading(true);
     setError(null);
 
@@ -143,7 +148,7 @@ export const Analyze: React.FC = () => {
                 </span>
               </div>
               <p className="text-text-secondary text-[11px] leading-relaxed">
-                Specify the known ground-truth label for evaluator comparison. The model will analyze independently.
+                Label this image using the known answer. This reference is used only to measure whether the model prediction was correct; it never enters the prediction pipeline.
               </p>
               <div className="flex items-center gap-2 pt-1">
                 <button
@@ -155,7 +160,7 @@ export const Analyze: React.FC = () => {
                       : "border border-border bg-surface text-text-secondary hover:text-text-primary"
                   }`}
                 >
-                  Real / Authentic
+                  {groundTruth === "real" ? "✓ Real / Authentic" : "Real / Authentic"}
                 </button>
                 <button
                   type="button"
@@ -166,7 +171,7 @@ export const Analyze: React.FC = () => {
                       : "border border-border bg-surface text-text-secondary hover:text-text-primary"
                   }`}
                 >
-                  AI-Generated
+                  {groundTruth === "ai_generated" ? "✓ AI-Generated" : "AI-Generated"}
                 </button>
                 {groundTruth && (
                   <button

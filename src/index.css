@@ -86,6 +86,13 @@
   }
 }
 
+.text-\[9px\] { font-size: 0.75rem !important; }
+.text-\[10px\] { font-size: 0.75rem !important; }
+.text-\[11px\] { font-size: 0.8125rem !important; }
+.text-\[12px\] { font-size: 0.875rem !important; }
+.text-xs { font-size: 0.8125rem !important; }
+.text-sm { font-size: 0.9375rem !important; }
+
 /* Custom scrollbars that adapt to themes */
 ::-webkit-scrollbar {
   width: 6px;

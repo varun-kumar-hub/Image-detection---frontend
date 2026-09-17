@@ -111,7 +111,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <X className="h-4 w-4" />
         </button>
         <button
-          onClick={() => setPinned(!pinned)}
+          onClick={() => {
+            if (pinned) {
+              setPinned(false);
+              setIsCollapsed(false);
+            } else {
+              setPinned(true);
+              setIsCollapsed(false);
+            }
+          }}
           className={`${isCollapsed && !mobileOpen ? "hidden" : "hidden md:flex"} p-1 rounded border border-border bg-surface-secondary text-text-muted hover:text-text-primary transition-colors cursor-pointer`}
           aria-label={pinned ? "Unpin sidebar" : "Pin sidebar"}
           title={pinned ? "Unpin sidebar" : "Pin sidebar"}
@@ -121,9 +129,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
         {/* Desktop collapse toggle */}
         <button
-          onClick={() => setIsCollapsed(!isCollapsed)}
+          onClick={() => {
+            if (pinned) {
+              setPinned(false);
+              setIsCollapsed(true);
+            } else {
+              setIsCollapsed(!isCollapsed);
+            }
+          }}
           className="hidden md:flex p-1 rounded border border-border bg-surface-secondary text-text-muted hover:text-text-primary transition-colors cursor-pointer shrink-0"
-          title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+          title={pinned ? "Unpin and collapse sidebar" : isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
           {isCollapsed ? <ChevronRight className="h-3.5 w-3.5" /> : <ChevronLeft className="h-3.5 w-3.5" />}
         </button>

@@ -105,10 +105,10 @@ export function App() {
     localStorage.setItem("image_detection_sidebar_collapsed", isCollapsed ? "true" : "false");
   }, [isCollapsed]);
 
-  useEffect(() => {
-    localStorage.setItem("sidebar_pinned", pinned ? "true" : "false");
-    setIsCollapsed(!pinned);
-  }, [pinned, setIsCollapsed]);
+    useEffect(() => {
+      localStorage.setItem("sidebar_pinned", pinned ? "true" : "false");
+      if (pinned) setIsCollapsed(false);
+    }, [pinned, setIsCollapsed]);
 
   return (
     <Router>

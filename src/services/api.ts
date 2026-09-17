@@ -37,7 +37,9 @@ export async function analyzeImage(file: File, groundTruth?: string): Promise<An
 
   const json = await res.json().catch(() => ({}));
   if (!res.ok || !json.success) {
-    const message = json?.error?.message || "Failed to analyze image";
+    const message = res.status === 502 || res.status === 503
+      ? "The analysis server is waking up or temporarily busy. Please wait a moment and try again."
+      : json?.error?.message || "Failed to analyze image";
     throw new Error(message);
   }
 

@@ -10,7 +10,7 @@ interface ResultCardProps {
 }
 
 export const ResultCard: React.FC<ResultCardProps> = ({ result, onAnalyzeAnother }) => {
-  const [explanationExpanded, setExplanationExpanded] = useState<boolean>(true);
+  const [explanationExpanded, setExplanationExpanded] = useState<boolean>(false);
   const [supportingExpanded, setSupportingExpanded] = useState<boolean>(false);
 
   const isAI = result.classification === "ai_generated";

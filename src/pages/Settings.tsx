@@ -20,6 +20,8 @@ export const Settings: React.FC<SettingsProps> = ({ darkMode, setDarkMode }) => 
   const [groundTruth, setGroundTruth] = useState<string>(() =>
     localStorage.getItem("image_detection_ground_truth") || ""
   );
+  const [backupSaving, setBackupSaving] = useState(false);
+  const [backupSaved, setBackupSaved] = useState(false);
 
   useEffect(() => {
     localStorage.setItem("image_detection_backup_mode", evaluationMode ? "true" : "false");
@@ -39,7 +41,17 @@ export const Settings: React.FC<SettingsProps> = ({ darkMode, setDarkMode }) => 
 
   const handleBackupModeChange = (enabled: boolean) => {
     setEvaluationMode(enabled);
-    updateBackupSettings(enabled, enabled ? groundTruth || null : null).catch(() => undefined);
+    setBackupSaved(false);
+  };
+
+  const handleSaveBackupMode = async () => {
+    setBackupSaving(true);
+    try {
+      await updateBackupSettings(evaluationMode, evaluationMode ? groundTruth || null : null);
+      setBackupSaved(true);
+    } finally {
+      setBackupSaving(false);
+    }
   };
 
   const handleSignOut = async () => {
@@ -150,13 +162,19 @@ export const Settings: React.FC<SettingsProps> = ({ darkMode, setDarkMode }) => 
               <p className="text-xs font-medium text-text-primary">Label for the next image</p>
               <div className="flex gap-2">
                 {[["real", "Real / Authentic"], ["ai_generated", "AI-Generated"]].map(([value, label]) => (
-                  <button key={value} type="button" onClick={() => { setGroundTruth(value); updateBackupSettings(true, value); }} className={`px-3 py-2 rounded border text-xs font-medium ${groundTruth === value ? "border-text-primary bg-surface-secondary text-text-primary" : "border-border text-text-secondary"}`}>
+                  <button key={value} type="button" onClick={() => { setGroundTruth(value); setBackupSaved(false); }} className={`px-3 py-2 rounded border text-xs font-medium ${groundTruth === value ? "border-text-primary bg-surface-secondary text-text-primary" : "border-border text-text-secondary"}`}>
                     {groundTruth === value ? "✓ " : ""}{label}
                   </button>
                 ))}
               </div>
             </div>
           )}
+          <div className="flex items-center justify-end gap-3 pt-2 border-t border-border">
+            {backupSaved && <span className="text-xs text-emerald-600 dark:text-emerald-400">Backup Mode saved</span>}
+            <button type="button" onClick={handleSaveBackupMode} disabled={backupSaving || (evaluationMode && !groundTruth)} className="px-4 py-2 rounded-lg bg-accent text-accent-contrast text-sm font-medium disabled:opacity-50">
+              {backupSaving ? "Saving..." : "Save Backup Mode"}
+            </button>
+          </div>
         </div>
       </section>
 

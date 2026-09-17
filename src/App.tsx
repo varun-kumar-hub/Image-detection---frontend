@@ -34,7 +34,7 @@ function PublicHeader({ darkMode, setDarkMode }: { darkMode: boolean; setDarkMod
   );
 }
 
-function AppContent({ darkMode, setDarkMode }: { darkMode: boolean; setDarkMode: (value: boolean) => void }) {
+function AppContent({ darkMode, setDarkMode, isCollapsed, setIsCollapsed, mobileOpen, setMobileOpen, pinned, setPinned }: { darkMode: boolean; setDarkMode: (value: boolean) => void; isCollapsed: boolean; setIsCollapsed: (value: boolean) => void; mobileOpen: boolean; setMobileOpen: (value: boolean) => void; pinned: boolean; setPinned: (value: boolean) => void }) {
   const { isAuthenticated } = useAuth();
   const location = useLocation();
   const publicRoute = location.pathname === "/" || location.pathname === "/login" || location.pathname === "/auth";
@@ -56,9 +56,9 @@ function AppContent({ darkMode, setDarkMode }: { darkMode: boolean; setDarkMode:
 
   return (
     <div className="min-h-screen flex bg-background text-text-primary transition-colors duration-200 antialiased">
-      <Sidebar isCollapsed={false} setIsCollapsed={() => {}} mobileOpen={false} setMobileOpen={() => {}} />
+      <Sidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} pinned={pinned} setPinned={setPinned} />
       <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
-        <Header darkMode={darkMode} setDarkMode={setDarkMode} onOpenMobileMenu={() => {}} />
+        <Header darkMode={darkMode} setDarkMode={setDarkMode} onOpenMobileMenu={() => setMobileOpen(!mobileOpen)} />
         <main className="flex-1 overflow-y-auto px-4 py-8 sm:px-6 lg:px-10">
           <Routes>
             <Route path="/" element={<Dashboard />} />
@@ -89,6 +89,7 @@ export function App() {
   });
 
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
+  const [pinned, setPinned] = useState<boolean>(() => localStorage.getItem("sidebar_pinned") === "true");
 
   useEffect(() => {
     if (darkMode) {
@@ -104,11 +105,16 @@ export function App() {
     localStorage.setItem("image_detection_sidebar_collapsed", isCollapsed ? "true" : "false");
   }, [isCollapsed]);
 
+  useEffect(() => {
+    localStorage.setItem("sidebar_pinned", pinned ? "true" : "false");
+    setIsCollapsed(!pinned);
+  }, [pinned, setIsCollapsed]);
+
   return (
     <Router>
       <AuthProvider>
         <AnalysisProvider>
-          <AppContent darkMode={darkMode} setDarkMode={setDarkMode} />
+        <AppContent darkMode={darkMode} setDarkMode={setDarkMode} isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} pinned={pinned} setPinned={setPinned} />
         </AnalysisProvider>
         {false && (
         <div className="min-h-screen flex bg-background text-text-primary transition-colors duration-200 antialiased selection:bg-accent/20 selection:text-accent">
@@ -118,6 +124,8 @@ export function App() {
             setIsCollapsed={setIsCollapsed}
             mobileOpen={mobileOpen}
             setMobileOpen={setMobileOpen}
+            pinned={pinned}
+            setPinned={setPinned}
           />
 
           {/* Main App Content Area */}

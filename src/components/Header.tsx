@@ -38,8 +38,9 @@ export const Header: React.FC<HeaderProps> = ({
       <div className="flex items-center gap-3">
         <button
           onClick={onOpenMobileMenu}
-          className="md:hidden p-1.5 rounded border border-border bg-surface-secondary text-text-secondary hover:text-text-primary"
-          aria-label="Open sidebar navigation"
+          className="md:hidden flex h-11 w-11 items-center justify-center rounded border border-border bg-surface-secondary text-text-secondary hover:text-text-primary"
+          aria-label="Open navigation"
+          aria-expanded={false}
         >
           <Menu className="h-4 w-4" />
         </button>

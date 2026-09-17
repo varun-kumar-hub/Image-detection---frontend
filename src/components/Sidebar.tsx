@@ -12,6 +12,7 @@ import {
   ChevronLeft,
   ChevronRight,
   X
+  ,Pin
 } from "lucide-react";
 import { useAuth } from "../auth/useAuth";
 
@@ -20,13 +21,15 @@ interface SidebarProps {
   setIsCollapsed: (val: boolean) => void;
   mobileOpen: boolean;
   setMobileOpen: (val: boolean) => void;
+  pinned: boolean;
+  setPinned: (val: boolean) => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
   isCollapsed,
   setIsCollapsed,
   mobileOpen,
-  setMobileOpen
+  setMobileOpen, pinned, setPinned
 }) => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -85,7 +88,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <div className="h-7 w-7 rounded border border-border bg-surface-secondary flex items-center justify-center shrink-0">
             <Scan className="h-4 w-4 text-text-primary" />
           </div>
-          {!isCollapsed && (
+          {(!isCollapsed || mobileOpen) && (
             <div className="truncate">
               <span className="font-semibold text-sm tracking-tight text-text-primary block leading-none">
                 Image Detection
@@ -104,6 +107,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
           aria-label="Close sidebar"
         >
           <X className="h-4 w-4" />
+        </button>
+        <button
+          onClick={() => setPinned(!pinned)}
+          className="hidden md:flex p-1 rounded border border-border bg-surface-secondary text-text-muted hover:text-text-primary transition-colors cursor-pointer"
+          aria-label={pinned ? "Unpin sidebar" : "Pin sidebar"}
+          title={pinned ? "Unpin sidebar" : "Pin sidebar"}
+        >
+          <Pin className={`h-3.5 w-3.5 ${pinned ? "fill-current text-text-primary" : ""}`} />
         </button>
 
         {/* Desktop collapse toggle */}
@@ -124,7 +135,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
           return (
             <div key={group.label} className="space-y-1">
-              {!isCollapsed && (
+              {(!isCollapsed || mobileOpen) && (
                 <div className="px-3 pb-1 text-[10px] font-mono tracking-wider text-text-muted uppercase">
                   {group.label}
                 </div>
@@ -138,15 +149,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     key={item.path}
                     to={item.path}
                     onClick={() => setMobileOpen(false)}
-                    title={isCollapsed ? item.name : undefined}
+                    title={isCollapsed && !mobileOpen ? item.name : undefined}
                     className={`flex items-center gap-3 px-3 py-2 rounded text-xs transition-colors ${
                       active
                         ? "bg-surface-secondary text-text-primary font-medium border border-border"
                         : "text-text-secondary hover:text-text-primary hover:bg-surface-secondary/70 border border-transparent"
-                    } ${isCollapsed ? "justify-center px-2" : ""}`}
+                    } ${isCollapsed && !mobileOpen ? "justify-center px-2" : ""}`}
                   >
                     <Icon className="h-4 w-4 shrink-0 text-text-secondary" />
-                    {!isCollapsed && <span className="truncate">{item.name}</span>}
+                    {(!isCollapsed || mobileOpen) && <span className="truncate">{item.name}</span>}
                   </Link>
                 );
               })}
@@ -159,7 +170,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       <div className="p-3 border-t border-border bg-surface shrink-0">
         {isAuthenticated ? (
           <div className="space-y-2">
-            {!isCollapsed ? (
+            {(!isCollapsed || mobileOpen) ? (
               <div className="flex items-center justify-between gap-2 p-1.5 rounded bg-surface-secondary border border-border">
                 <div className="flex items-center gap-2 min-w-0">
                   <div className="w-6 h-6 rounded-full bg-border flex items-center justify-center text-[10px] font-mono font-medium text-text-primary shrink-0">
@@ -190,7 +201,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
         ) : (
           <div>
-            {!isCollapsed ? (
+            {(!isCollapsed || mobileOpen) ? (
               <Link
                 to="/login"
                 onClick={() => setMobileOpen(false)}
@@ -220,8 +231,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
     <>
       {/* Desktop Sidebar (hidden on mobile, fixed width on md+) */}
       <aside
+        onMouseEnter={() => !pinned && setIsCollapsed(false)}
+        onMouseLeave={() => !pinned && setIsCollapsed(true)}
         className={`hidden md:block shrink-0 h-screen sticky top-0 transition-all duration-200 z-30 ${
-          isCollapsed ? "w-16" : "w-56"
+          isCollapsed && !pinned ? "w-16" : "w-56"
         }`}
       >
         {sidebarContent}

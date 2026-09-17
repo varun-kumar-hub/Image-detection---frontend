@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { ResultCard } from "../components/ResultCard";
 import { getResult } from "../services/api";
+import { useAnalysis } from "../state/AnalysisProvider";
 import type { AnalysisResult } from "../types";
 import { ArrowLeft, AlertCircle } from "lucide-react";
 
 export const Results: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const [result, setResult] = useState<AnalysisResult | null>(null);
+  const { result: activeResult, setAnalysisResult } = useAnalysis();
+  const [result, setResult] = useState<AnalysisResult | null>(activeResult?.id === id ? activeResult : null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -16,11 +18,15 @@ export const Results: React.FC = () => {
     setIsLoading(true);
     setError(null);
 
+    if (activeResult?.id === id) {
+      setIsLoading(false);
+      return;
+    }
     getResult(id)
-      .then((data) => setResult(data))
+      .then((data) => { setResult(data); setAnalysisResult(data); })
       .catch((err) => setError(err.message || "Failed to load analysis record."))
       .finally(() => setIsLoading(false));
-  }, [id]);
+  }, [id, activeResult, setAnalysisResult]);
 
   return (
     <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-10 sm:py-16">

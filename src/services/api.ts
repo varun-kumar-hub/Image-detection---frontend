@@ -35,12 +35,9 @@ export async function updateBackupSettings(enabled: boolean, reference: string |
   if (!res.ok) throw new Error("Failed to save Backup Mode settings");
 }
 
-export async function analyzeImage(file: File, groundTruth?: string): Promise<AnalysisResult> {
+export async function analyzeImage(file: File): Promise<AnalysisResult> {
   const formData = new FormData();
   formData.append("file", file);
-  if (groundTruth) {
-    formData.append("ground_truth", groundTruth);
-  }
 
   const authHeaders = await getAuthHeaders();
 

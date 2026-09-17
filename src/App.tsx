@@ -15,6 +15,7 @@ import { Dataset } from "./pages/Dataset";
 import { Login } from "./pages/Login";
 import { Landing } from "./pages/Landing";
 import { useAuth } from "./auth/useAuth";
+import { AnalysisProvider } from "./state/AnalysisProvider";
 
 function PublicHeader({ darkMode, setDarkMode }: { darkMode: boolean; setDarkMode: (value: boolean) => void }) {
   return (
@@ -106,7 +107,9 @@ export function App() {
   return (
     <Router>
       <AuthProvider>
-        <AppContent darkMode={darkMode} setDarkMode={setDarkMode} />
+        <AnalysisProvider>
+          <AppContent darkMode={darkMode} setDarkMode={setDarkMode} />
+        </AnalysisProvider>
         {false && (
         <div className="min-h-screen flex bg-background text-text-primary transition-colors duration-200 antialiased selection:bg-accent/20 selection:text-accent">
           {/* Collapsible Left Navigation Sidebar */}

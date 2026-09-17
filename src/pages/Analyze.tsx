@@ -6,26 +6,19 @@ import { ProcessingSteps } from "../components/ProcessingSteps";
 import { ResultCard } from "../components/ResultCard";
 import { analyzeImage } from "../services/api";
 import { useAuth } from "../auth/useAuth";
-import type { AnalysisResult } from "../types";
+import { useAnalysis } from "../state/AnalysisProvider";
 import { AlertCircle } from "lucide-react";
 
 export const Analyze: React.FC = () => {
   const persistedImageKey = "image_detection_pending_image";
   const { isAuthenticated } = useAuth();
+  const { result, setAnalysisResult, clearAnalysis } = useAnalysis();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [result, setResult] = useState<AnalysisResult | null>(null);
-
-  // Hidden Evaluation Mode state (configured in Settings)
-  const [evaluationModeEnabled, setEvaluationModeEnabled] = useState<boolean>(false);
   const [groundTruth, setGroundTruth] = useState<string | null>(null);
 
   useEffect(() => {
-    const isEvalEnabled = localStorage.getItem("image_detection_backup_mode") === "true" || localStorage.getItem("image_detection_evaluation_mode") === "true";
-    setEvaluationModeEnabled(isEvalEnabled);
-    setGroundTruth(localStorage.getItem("image_detection_ground_truth"));
-
     const savedImage = localStorage.getItem(persistedImageKey);
     if (savedImage) {
       try {
@@ -43,7 +36,7 @@ export const Analyze: React.FC = () => {
   const handleFileSelect = (file: File) => {
     setSelectedFile(file);
     setError(null);
-    setResult(null);
+    clearAnalysis();
 
     if (file.size <= 5 * 1024 * 1024) {
       const reader = new FileReader();
@@ -61,25 +54,20 @@ export const Analyze: React.FC = () => {
   const handleRemove = () => {
     setSelectedFile(null);
     setError(null);
-    setResult(null);
-    setGroundTruth(null);
+    clearAnalysis();
     localStorage.removeItem(persistedImageKey);
   };
 
   const handleAnalyze = async () => {
     if (!selectedFile) return;
 
-    if (evaluationModeEnabled && !groundTruth) {
-      setError("Select the known label for this image before running evaluation.");
-      return;
-    }
-
     setIsLoading(true);
     setError(null);
 
     try {
-      const res = await analyzeImage(selectedFile, groundTruth || undefined);
-      setResult(res);
+      const res = await analyzeImage(selectedFile);
+      setAnalysisResult(res);
+      localStorage.removeItem(persistedImageKey);
     } catch (err: any) {
       setError(err.message || "An error occurred while analyzing the image. Please try again.");
     } finally {
@@ -89,9 +77,8 @@ export const Analyze: React.FC = () => {
 
   const handleAnalyzeAnother = () => {
     setSelectedFile(null);
-    setResult(null);
+    clearAnalysis();
     setError(null);
-    setGroundTruth(null);
     localStorage.removeItem(persistedImageKey);
   };
 
@@ -163,7 +150,7 @@ export const Analyze: React.FC = () => {
           />
 
           {/* Testing Reference: ONLY VISIBLE WHEN EVALUATION MODE IS ENABLED IN SETTINGS */}
-          {false && evaluationModeEnabled && (
+          {false && (
             <div className="p-3.5 rounded-lg border border-border bg-surface text-xs space-y-2 animate-in fade-in">
               <div className="flex items-center justify-between">
                 <span className="text-[10px] font-mono text-text-muted uppercase tracking-wider">

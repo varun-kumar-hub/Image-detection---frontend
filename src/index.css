@@ -4,14 +4,24 @@
 
 @layer base {
   :root {
-    --background: #FAFAFA;
+    --background: #F7F7F8;
     --surface: #FFFFFF;
-    --surface-secondary: #F5F5F5;
-    --surface-hover: #EFEFEF;
-    --border: #E5E5E5;
-    --text-primary: #171717;
-    --text-secondary: #666666;
-    --text-muted: #888888;
+    --surface-secondary: #F2F2F3;
+    --surface-elevated: #FFFFFF;
+    --surface-hover: #F4F4F5;
+    --surface-active: #EAEAEA;
+    --border: #E2E2E5;
+    --border-strong: #D4D4D8;
+    --text-primary: #18181B;
+    --text-secondary: #52525B;
+    --text-muted: #71717A;
+    --text-placeholder: #A1A1AA;
+    --input-background: #FFFFFF;
+    --input-border: #D4D4D8;
+    --sidebar-background: #FFFFFF;
+    --sidebar-border: #E2E2E5;
+    --header-background: #FFFFFF;
+    --header-border: #E2E2E5;
     --accent: #171717;
     --accent-contrast: #FFFFFF;
     --badge-bg: #EFEFEF;
@@ -22,14 +32,24 @@
   }
 
   .dark {
-    --background: #0A0A0A;
-    --surface: #111111;
-    --surface-secondary: #161616;
-    --surface-hover: #1F1F1F;
-    --border: #242424;
-    --text-primary: #F5F5F5;
-    --text-secondary: #A1A1A1;
-    --text-muted: #737373;
+    --background: #09090B;
+    --surface: #101012;
+    --surface-secondary: #151518;
+    --surface-elevated: #18181B;
+    --surface-hover: #1C1C20;
+    --surface-active: #232327;
+    --border: #27272A;
+    --border-strong: #3F3F46;
+    --text-primary: #F4F4F5;
+    --text-secondary: #A1A1AA;
+    --text-muted: #71717A;
+    --text-placeholder: #52525B;
+    --input-background: #09090B;
+    --input-border: #3F3F46;
+    --sidebar-background: #101012;
+    --sidebar-border: #27272A;
+    --header-background: #101012;
+    --header-border: #27272A;
     --accent: #F5F5F5;
     --accent-contrast: #0A0A0A;
     --badge-bg: #1F1F1F;
@@ -53,6 +73,16 @@
     overflow-x: hidden;
     margin: 0;
     padding: 0;
+  }
+
+  input, select, textarea {
+    background-color: var(--input-background);
+    border-color: var(--input-border);
+    color: var(--text-primary);
+  }
+
+  input::placeholder, textarea::placeholder {
+    color: var(--text-placeholder);
   }
 }
 

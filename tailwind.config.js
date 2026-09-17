@@ -12,13 +12,19 @@ export default {
         surface: {
           DEFAULT: "var(--surface)",
           secondary: "var(--surface-secondary)",
+          elevated: "var(--surface-elevated)",
           hover: "var(--surface-hover)",
+          active: "var(--surface-active)",
         },
-        border: "var(--border)",
+        border: {
+          DEFAULT: "var(--border)",
+          strong: "var(--border-strong)",
+        },
         text: {
           primary: "var(--text-primary)",
           secondary: "var(--text-secondary)",
           muted: "var(--text-muted)",
+          placeholder: "var(--text-placeholder)",
         },
         accent: {
           DEFAULT: "var(--accent)",

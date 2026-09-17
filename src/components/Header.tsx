@@ -35,7 +35,7 @@ export const Header: React.FC<HeaderProps> = ({
   const userName = user?.user_metadata?.full_name || user?.user_metadata?.name || "User";
 
   return (
-    <header className="sticky top-0 z-20 w-full h-14 border-b border-border bg-surface/90 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between transition-colors">
+    <header className="sticky top-0 z-20 w-full h-14 border-b border-[var(--header-border)] bg-[var(--header-background)]/95 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between transition-colors">
       
       {/* Left: Mobile hamburger & title */}
       <div className="flex items-center gap-3">

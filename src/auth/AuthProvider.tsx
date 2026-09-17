@@ -117,10 +117,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // During initial session check, render a calm minimal splash shell
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-[#0A0A0A] text-[#F5F5F5]">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-background text-text-primary">
         <div className="flex flex-col items-center gap-3">
-          <div className="h-5 w-5 rounded-full border-2 border-[#242424] border-t-[#F5F5F5] animate-spin" />
-          <span className="text-xs font-mono text-[#A1A1A1] tracking-wider uppercase">
+          <div className="h-5 w-5 rounded-full border-2 border-border border-t-text-primary animate-spin" />
+          <span className="text-xs font-mono text-text-secondary tracking-wider uppercase">
             Restoring session...
           </span>
         </div>

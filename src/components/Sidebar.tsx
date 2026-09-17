@@ -72,7 +72,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const userEmail = user?.email || "user@imagedetection.io";
 
   const sidebarContent = (
-    <div className="flex flex-col h-full bg-surface border-r border-border transition-all duration-200">
+    <div className="flex flex-col h-full bg-[var(--sidebar-background)] border-r border-[var(--sidebar-border)] transition-all duration-200">
       
       {/* 1. Header / Brand */}
       <div className="flex items-center justify-between h-14 px-4 border-b border-border shrink-0">

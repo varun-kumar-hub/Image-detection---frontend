@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Scan, ArrowRight } from "lucide-react";
+import { Scan, ArrowRight, Brain, Image as ImageIcon, Target, BarChart3 } from "lucide-react";
 import { getHistory } from "../services/api";
 import { useAuth } from "../auth/useAuth";
 import type { AnalysisResult } from "../types";
 
 export const Dashboard: React.FC = () => {
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const [recentItems, setRecentItems] = useState<AnalysisResult[]>([]);
   const [totalCount, setTotalCount] = useState<number>(0);
   const [realCount, setRealCount] = useState<number>(0);
   const [aiCount, setAiCount] = useState<number>(0);
+  const [reviewCount, setReviewCount] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -26,8 +27,10 @@ export const Dashboard: React.FC = () => {
         setTotalCount(data.total);
         const ai = data.items.filter((i) => i.classification === "ai_generated").length;
         const real = data.items.filter((i) => i.classification === "real").length;
+        const review = data.items.filter((i) => i.classification === "needs_review").length;
         setAiCount(ai);
         setRealCount(real);
+        setReviewCount(review);
       })
       .catch((err) => {
         console.warn("Failed to load dashboard history:", err);
@@ -36,24 +39,32 @@ export const Dashboard: React.FC = () => {
   }, [isAuthenticated]);
 
   return (
-    <div className="space-y-8 max-w-5xl mx-auto py-4">
+    <div className="space-y-8 max-w-6xl mx-auto py-6">
+      <div className="space-y-1">
+        <p className="text-sm font-mono uppercase tracking-wider text-accent">Image Detection</p>
+        <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-text-primary">
+          Good {new Date().getHours() < 12 ? "morning" : new Date().getHours() < 18 ? "afternoon" : "evening"}{user?.user_metadata?.name ? `, ${user.user_metadata.name.split(" ")[0]}` : ""}
+        </h1>
+        <p className="text-base text-text-secondary">Review your image authenticity analyses and model results.</p>
+      </div>
       
       {/* 1. Hero / Value Proposition */}
-      <div className="p-6 sm:p-8 rounded-lg border border-border bg-surface relative overflow-hidden">
+        <div className="p-6 sm:p-8 rounded-xl border border-border bg-surface relative overflow-hidden shadow-sm">
         <div className="max-w-xl space-y-3">
-          <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded border border-border bg-surface-secondary text-[11px] font-mono text-text-secondary">
-            <span>EfficientNet-B0 Deep Learning</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border bg-surface-secondary text-xs font-mono text-text-secondary">
+            <Brain className="h-3.5 w-3.5 text-accent" />
+            <span>EfficientNet-B0 · Binary Classification</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-text-primary">
             Image Detection
           </h1>
-          <p className="text-xs sm:text-sm text-text-secondary leading-relaxed">
-            Upload an image to determine whether it appears authentic or AI-generated using high-dimensional learned visual feature representations.
+          <p className="text-base text-text-secondary leading-relaxed max-w-2xl">
+            Analyze an image to estimate whether it appears Real / Authentic or AI-Generated using learned visual representations. Results are indicators, not absolute proof.
           </p>
           <div className="pt-3">
             <Link
               to="/analyze"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded text-xs font-medium bg-accent text-accent-contrast hover:opacity-90 transition-opacity"
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-lg text-sm font-medium bg-accent text-accent-contrast hover:opacity-90 transition-opacity"
             >
               <Scan className="h-4 w-4" />
               <span>Analyze Image</span>
@@ -64,29 +75,34 @@ export const Dashboard: React.FC = () => {
       </div>
 
       {/* 2. Overview Counters */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="p-4 rounded-lg border border-border bg-surface space-y-1">
-          <span className="text-[11px] font-mono text-text-muted uppercase">Total Analyses</span>
-          <p className="text-2xl font-mono font-semibold text-text-primary">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+        <div className="p-5 rounded-lg border border-border bg-surface space-y-2">
+          <div className="flex items-center justify-between"><span className="text-xs font-mono text-text-muted uppercase tracking-wider">Total Analyses</span><BarChart3 className="h-4 w-4 text-accent" /></div>
+          <p className="text-3xl font-mono font-semibold text-text-primary">
             {isAuthenticated ? totalCount : "—"}
           </p>
-          <p className="text-[11px] text-text-muted">Analyses processed by model</p>
+          <p className="text-sm text-text-muted">All-time analyses</p>
         </div>
 
-        <div className="p-4 rounded-lg border border-border bg-surface space-y-1">
-          <span className="text-[11px] font-mono text-text-muted uppercase">Authentic Images</span>
-          <p className="text-2xl font-mono font-semibold text-text-primary">
+        <div className="p-5 rounded-lg border border-border bg-surface space-y-2">
+          <div className="flex items-center justify-between"><span className="text-xs font-mono text-text-muted uppercase tracking-wider">Authentic Images</span><ImageIcon className="h-4 w-4 text-emerald-600 dark:text-emerald-400" /></div>
+          <p className="text-3xl font-mono font-semibold text-text-primary">
             {isAuthenticated ? realCount : "—"}
           </p>
-          <p className="text-[11px] text-text-muted">Classified as camera/authentic</p>
+          <p className="text-sm text-text-muted">Camera / authentic signal</p>
         </div>
 
-        <div className="p-4 rounded-lg border border-border bg-surface space-y-1">
-          <span className="text-[11px] font-mono text-text-muted uppercase">AI-Generated Images</span>
-          <p className="text-2xl font-mono font-semibold text-text-primary">
+        <div className="p-5 rounded-lg border border-border bg-surface space-y-2">
+          <div className="flex items-center justify-between"><span className="text-xs font-mono text-text-muted uppercase tracking-wider">AI-Generated Images</span><Target className="h-4 w-4 text-amber-600 dark:text-amber-400" /></div>
+          <p className="text-3xl font-mono font-semibold text-text-primary">
             {isAuthenticated ? aiCount : "—"}
           </p>
-          <p className="text-[11px] text-text-muted">Classified as synthetic/AI</p>
+          <p className="text-sm text-text-muted">Synthetic / AI signal</p>
+        </div>
+        <div className="p-5 rounded-lg border border-border bg-surface space-y-2">
+          <div className="flex items-center justify-between"><span className="text-xs font-mono text-text-muted uppercase tracking-wider">Needs Review</span><span className="h-2.5 w-2.5 rounded-full bg-amber-500" /></div>
+          <p className="text-3xl font-mono font-semibold text-text-primary">{isAuthenticated ? reviewCount : "—"}</p>
+          <p className="text-sm text-text-muted">Uncertain predictions</p>
         </div>
       </div>
 

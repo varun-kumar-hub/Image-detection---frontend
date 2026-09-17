@@ -58,7 +58,7 @@ function AppContent({ darkMode, setDarkMode }: { darkMode: boolean; setDarkMode:
       <Sidebar isCollapsed={false} setIsCollapsed={() => {}} mobileOpen={false} setMobileOpen={() => {}} />
       <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
         <Header darkMode={darkMode} setDarkMode={setDarkMode} onOpenMobileMenu={() => {}} />
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+        <main className="flex-1 overflow-y-auto px-4 py-8 sm:px-6 lg:px-10">
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/dashboard" element={<Dashboard />} />

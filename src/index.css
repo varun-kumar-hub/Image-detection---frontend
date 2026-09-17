@@ -4,17 +4,17 @@
 
 @layer base {
   :root {
-    --background: #F7F7F8;
+    --background: #F4F5F7;
     --surface: #FFFFFF;
-    --surface-secondary: #F2F2F3;
+    --surface-secondary: #FAFAFA;
     --surface-elevated: #FFFFFF;
     --surface-hover: #F4F4F5;
     --surface-active: #EAEAEA;
-    --border: #E2E2E5;
-    --border-strong: #D4D4D8;
-    --text-primary: #18181B;
-    --text-secondary: #52525B;
-    --text-muted: #71717A;
+    --border: #D9DCE1;
+    --border-strong: #C8CCD2;
+    --text-primary: #17181A;
+    --text-secondary: #4F5358;
+    --text-muted: #70757C;
     --text-placeholder: #A1A1AA;
     --input-background: #FFFFFF;
     --input-border: #D4D4D8;
@@ -32,17 +32,17 @@
   }
 
   .dark {
-    --background: #09090B;
-    --surface: #101012;
-    --surface-secondary: #151518;
-    --surface-elevated: #18181B;
+    --background: #08090A;
+    --surface: #141517;
+    --surface-secondary: #16181B;
+    --surface-elevated: #181A1D;
     --surface-hover: #1C1C20;
     --surface-active: #232327;
-    --border: #27272A;
-    --border-strong: #3F3F46;
+    --border: #292C30;
+    --border-strong: #3A3E44;
     --text-primary: #F4F4F5;
-    --text-secondary: #A1A1AA;
-    --text-muted: #71717A;
+    --text-secondary: #B3B7BD;
+    --text-muted: #858A91;
     --text-placeholder: #52525B;
     --input-background: #09090B;
     --input-border: #3F3F46;

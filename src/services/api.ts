@@ -35,6 +35,31 @@ export async function updateBackupSettings(enabled: boolean, reference: string |
   if (!res.ok) throw new Error("Failed to save Backup Mode settings");
 }
 
+export async function getGeminiSettings() {
+  const res = await fetch(`${API_BASE}/settings/gemini`, { headers: await getAuthHeaders() });
+  if (!res.ok) throw new Error("Failed to load Gemini settings");
+  return res.json();
+}
+
+export async function saveGeminiKey(apiKey: string) {
+  const res = await fetch(`${API_BASE}/settings/gemini`, { method: "POST", headers: { ...(await getAuthHeaders()), "Content-Type": "application/json" }, body: JSON.stringify({ api_key: apiKey }) });
+  const json = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(json?.error?.message || "Failed to save Gemini key");
+  return json;
+}
+
+export async function testGeminiKey() {
+  const res = await fetch(`${API_BASE}/settings/gemini/test`, { method: "POST", headers: await getAuthHeaders() });
+  const json = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(json?.error?.message || "Gemini connection failed");
+  return json;
+}
+
+export async function removeGeminiKey() {
+  const res = await fetch(`${API_BASE}/settings/gemini`, { method: "DELETE", headers: await getAuthHeaders() });
+  if (!res.ok) throw new Error("Failed to remove Gemini key");
+}
+
 export async function analyzeImage(file: File): Promise<AnalysisResult> {
   const formData = new FormData();
   formData.append("file", file);

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Moon, Sun, Shield, User, LogOut, CheckCircle, Sliders, ToggleLeft, ToggleRight } from "lucide-react";
 import { useAuth } from "../auth/useAuth";
 import { useNavigate } from "react-router-dom";
-import { getBackupSettings, updateBackupSettings } from "../services/api";
+import { getBackupSettings, updateBackupSettings, getGeminiSettings, saveGeminiKey, testGeminiKey, removeGeminiKey } from "../services/api";
 
 interface SettingsProps {
   darkMode: boolean;
@@ -22,6 +22,10 @@ export const Settings: React.FC<SettingsProps> = ({ darkMode, setDarkMode }) => 
   );
   const [backupSaving, setBackupSaving] = useState(false);
   const [backupSaved, setBackupSaved] = useState(false);
+  const [geminiConfigured, setGeminiConfigured] = useState(false);
+  const [geminiMasked, setGeminiMasked] = useState<string | null>(null);
+  const [geminiKey, setGeminiKey] = useState("");
+  const [geminiMessage, setGeminiMessage] = useState("");
 
   useEffect(() => {
     localStorage.setItem("image_detection_backup_mode", evaluationMode ? "true" : "false");
@@ -38,6 +42,17 @@ export const Settings: React.FC<SettingsProps> = ({ darkMode, setDarkMode }) => 
       setGroundTruth(data.reference || "");
     }).catch(() => undefined);
   }, []);
+
+  useEffect(() => {
+    getGeminiSettings().then((data) => { setGeminiConfigured(data.configured); setGeminiMasked(data.masked_key); }).catch(() => undefined);
+  }, []);
+
+  const handleGeminiSave = async () => {
+    try {
+      const data = await saveGeminiKey(geminiKey);
+      setGeminiConfigured(true); setGeminiMasked(data.masked_key); setGeminiKey(""); setGeminiMessage("Gemini connected");
+    } catch (error) { setGeminiMessage(error instanceof Error ? error.message : "Gemini connection failed"); }
+  };
 
   const handleBackupModeChange = (enabled: boolean) => {
     setEvaluationMode(enabled);
@@ -175,6 +190,34 @@ export const Settings: React.FC<SettingsProps> = ({ darkMode, setDarkMode }) => 
               {backupSaving ? "Saving..." : "Save Backup Mode"}
             </button>
           </div>
+        </div>
+      </section>
+
+      {/* 3. Account & Authentication */}
+      <section className="space-y-3">
+        <h2 className="text-xs font-mono uppercase tracking-widest text-text-muted">AI SERVICES</h2>
+        <div className="rounded-lg border border-border bg-surface p-5 space-y-4">
+          <div><p className="text-sm font-medium text-text-primary">Gemini API</p><p className="text-xs text-text-secondary mt-1">Optional secure explanations using your own Google Gemini quota.</p></div>
+          <p className="text-xs text-text-secondary">Status: {geminiConfigured ? `Connected (${geminiMasked})` : "Not connected"}</p>
+          {!geminiConfigured ? <div className="flex flex-col sm:flex-row gap-2"><input type="password" value={geminiKey} onChange={(event) => setGeminiKey(event.target.value)} placeholder="Paste Gemini API key" className="flex-1 rounded border border-border bg-background px-3 py-2 text-sm" autoComplete="off" /><button type="button" onClick={handleGeminiSave} className="rounded bg-accent px-4 py-2 text-sm text-accent-contrast">Save &amp; Test</button></div> : <div className="flex flex-wrap gap-2"><button type="button" onClick={async () => { try { await testGeminiKey(); setGeminiMessage("Gemini connection successful"); } catch (error) { setGeminiMessage(error instanceof Error ? error.message : "Connection failed"); } }} className="rounded border border-border px-3 py-2 text-sm">Test Connection</button><button type="button" onClick={async () => { if (window.confirm("Remove Gemini API key?")) { await removeGeminiKey(); setGeminiConfigured(false); setGeminiMasked(null); setGeminiMessage("Gemini key removed"); } }} className="rounded border border-red-900/30 px-3 py-2 text-sm text-red-400">Remove Key</button></div>}
+          {geminiMessage && <p className="text-xs text-text-secondary">{geminiMessage}</p>}
+          <p className="text-xs text-text-muted">Keys are never stored in the browser or displayed in full.</p>
+          <details className="rounded border border-border bg-surface-secondary p-3">
+            <summary className="cursor-pointer text-sm font-medium text-text-primary">How to get a Gemini API key</summary>
+            <div className="mt-3 space-y-3 text-xs leading-relaxed text-text-secondary">
+              <p><b>Step 1 — Open Google AI Studio:</b> Visit <a className="text-accent underline" href="https://aistudio.google.com/apikey" target="_blank" rel="noreferrer">Google AI Studio API Keys</a> and sign in with your Google account.</p>
+              <p><b>Step 2 — Create a key:</b> Select <b>Create API key</b>. If Google asks you to choose a project, select an existing project or create a new one.</p>
+              <p><b>Step 3 — Review access:</b> Confirm that the selected project has Gemini API access. Availability, quotas, and regional restrictions are controlled by Google.</p>
+              <p><b>Step 4 — Copy once:</b> Copy the generated key and paste it into the field above. The key is sent to the backend for validation and encrypted storage.</p>
+              <p><b>Step 5 — Test:</b> Select <b>Save &amp; Test</b>. A successful message confirms that the key can make a minimal Gemini request.</p>
+              <p><b>Step 6 — Protect the key:</b> Never share it, place it in frontend code, add it to a URL, commit it to GitHub, or post it in screenshots. If exposed, revoke it in Google AI Studio and create a replacement.</p>
+              <p><b>Optional security:</b> Use Google Cloud/API-key restrictions where available, monitor usage, and set appropriate quotas or billing limits.</p>
+              <div className="flex flex-wrap gap-3 pt-1">
+                <a className="text-accent underline" href="https://ai.google.dev/gemini-api/docs" target="_blank" rel="noreferrer">Gemini API documentation</a>
+                <a className="text-accent underline" href="https://ai.google.dev/gemini-api/docs/api-key" target="_blank" rel="noreferrer">API-key security guidance</a>
+              </div>
+            </div>
+          </details>
         </div>
       </section>
 

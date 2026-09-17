@@ -11,8 +11,8 @@ import {
   LogIn,
   ChevronLeft,
   ChevronRight,
-  X
-  ,Pin
+  X,
+  Pin
 } from "lucide-react";
 import { useAuth } from "../auth/useAuth";
 
@@ -29,7 +29,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
   isCollapsed,
   setIsCollapsed,
   mobileOpen,
-  setMobileOpen, pinned, setPinned
+  setMobileOpen,
+  pinned,
+  setPinned
 }) => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -79,11 +81,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
     <div className="flex flex-col h-full bg-[var(--sidebar-background)] border-r border-[var(--sidebar-border)] transition-all duration-200">
       
       {/* 1. Header / Brand */}
-      <div className="flex items-center justify-between h-14 px-4 border-b border-border shrink-0">
+      <div className={`flex items-center h-14 border-b border-border shrink-0 ${isCollapsed && !mobileOpen ? "justify-center px-2" : "justify-between px-4"}`}>
         <Link
           to="/"
           onClick={() => setMobileOpen(false)}
-          className="flex items-center gap-2.5 overflow-hidden"
+          className="flex items-center gap-2.5 overflow-hidden min-w-0"
         >
           <div className="h-7 w-7 rounded border border-border bg-surface-secondary flex items-center justify-center shrink-0">
             <Scan className="h-4 w-4 text-text-primary" />
@@ -110,7 +112,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </button>
         <button
           onClick={() => setPinned(!pinned)}
-          className="hidden md:flex p-1 rounded border border-border bg-surface-secondary text-text-muted hover:text-text-primary transition-colors cursor-pointer"
+          className={`${isCollapsed && !mobileOpen ? "hidden" : "hidden md:flex"} p-1 rounded border border-border bg-surface-secondary text-text-muted hover:text-text-primary transition-colors cursor-pointer`}
           aria-label={pinned ? "Unpin sidebar" : "Pin sidebar"}
           title={pinned ? "Unpin sidebar" : "Pin sidebar"}
         >
@@ -120,7 +122,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {/* Desktop collapse toggle */}
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="hidden md:flex p-1 rounded border border-border bg-surface-secondary text-text-muted hover:text-text-primary transition-colors cursor-pointer"
+          className="hidden md:flex p-1 rounded border border-border bg-surface-secondary text-text-muted hover:text-text-primary transition-colors cursor-pointer shrink-0"
           title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
           {isCollapsed ? <ChevronRight className="h-3.5 w-3.5" /> : <ChevronLeft className="h-3.5 w-3.5" />}

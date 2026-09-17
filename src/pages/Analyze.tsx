@@ -24,6 +24,7 @@ export const Analyze: React.FC = () => {
   useEffect(() => {
     const isEvalEnabled = localStorage.getItem("image_detection_evaluation_mode") === "true";
     setEvaluationModeEnabled(isEvalEnabled);
+    setGroundTruth(localStorage.getItem("image_detection_ground_truth"));
 
     const savedImage = localStorage.getItem(persistedImageKey);
     if (savedImage) {
@@ -101,9 +102,6 @@ export const Analyze: React.FC = () => {
       const blob = await response.blob();
       const file = new File([blob], filename, { type: "image/jpeg" });
       handleFileSelect(file);
-      if (evaluationModeEnabled) {
-        setGroundTruth(type === "real" ? "real" : "ai_generated");
-      }
     } catch (err: any) {
       setError("Failed to load sample image.");
     }
@@ -165,7 +163,7 @@ export const Analyze: React.FC = () => {
           />
 
           {/* Testing Reference: ONLY VISIBLE WHEN EVALUATION MODE IS ENABLED IN SETTINGS */}
-          {evaluationModeEnabled && (
+          {false && evaluationModeEnabled && (
             <div className="p-3.5 rounded-lg border border-border bg-surface text-xs space-y-2 animate-in fade-in">
               <div className="flex items-center justify-between">
                 <span className="text-[10px] font-mono text-text-muted uppercase tracking-wider">

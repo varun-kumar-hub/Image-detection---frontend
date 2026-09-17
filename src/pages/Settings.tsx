@@ -16,10 +16,18 @@ export const Settings: React.FC<SettingsProps> = ({ darkMode, setDarkMode }) => 
   const [evaluationMode, setEvaluationMode] = useState<boolean>(() => {
     return localStorage.getItem("image_detection_evaluation_mode") === "true";
   });
+  const [groundTruth, setGroundTruth] = useState<string>(() =>
+    localStorage.getItem("image_detection_ground_truth") || ""
+  );
 
   useEffect(() => {
     localStorage.setItem("image_detection_evaluation_mode", evaluationMode ? "true" : "false");
   }, [evaluationMode]);
+
+  useEffect(() => {
+    if (groundTruth) localStorage.setItem("image_detection_ground_truth", groundTruth);
+    else localStorage.removeItem("image_detection_ground_truth");
+  }, [groundTruth]);
 
   const handleSignOut = async () => {
     await signOut();
@@ -102,7 +110,7 @@ export const Settings: React.FC<SettingsProps> = ({ darkMode, setDarkMode }) => 
               </p>
               <p className="text-xs text-text-secondary leading-relaxed max-w-xl">
                 Optional mode for demonstrating and evaluating the model against images with a known label.
-                When enabled, a testing reference selector appears on the Analyze page. The ground-truth label is strictly used for comparison and <b>never enters the ML prediction pipeline</b>.
+                When enabled, choose the known label here before uploading the image. The label is strictly used for comparison and <b>never enters the ML prediction pipeline</b>.
               </p>
             </div>
 
@@ -123,6 +131,19 @@ export const Settings: React.FC<SettingsProps> = ({ darkMode, setDarkMode }) => 
           <div className="p-3 rounded border border-border bg-surface-secondary text-[11px] text-text-muted">
             <b>Status:</b> {evaluationMode ? "Enabled — Testing Reference visible on Analyze page." : "Disabled (Default) — Standard upload workflow."}
           </div>
+
+          {evaluationMode && (
+            <div className="space-y-2">
+              <p className="text-xs font-medium text-text-primary">Label for the next image</p>
+              <div className="flex gap-2">
+                {[["real", "Real / Authentic"], ["ai_generated", "AI-Generated"]].map(([value, label]) => (
+                  <button key={value} type="button" onClick={() => setGroundTruth(value)} className={`px-3 py-2 rounded border text-xs font-medium ${groundTruth === value ? "border-text-primary bg-surface-secondary text-text-primary" : "border-border text-text-secondary"}`}>
+                    {groundTruth === value ? "✓ " : ""}{label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </section>
 

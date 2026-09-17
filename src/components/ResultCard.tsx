@@ -74,64 +74,12 @@ export const ResultCard: React.FC<ResultCardProps> = ({ result, onAnalyzeAnother
 
         {explanationExpanded && (
           <div className="space-y-4 text-xs text-text-secondary pt-2 border-t border-border">
-            {/* Summary */}
             <p className="leading-relaxed text-text-primary font-medium">
               {explanation?.summary || result.interpretation}
             </p>
-
-            {/* Model Basis */}
-            {explanation?.model_basis && (
-              <div className="space-y-1">
-                <span className="text-[10px] font-mono text-text-muted uppercase tracking-wider block">
-                  Model Representation Basis
-                </span>
-                <p className="leading-relaxed text-text-secondary">
-                  {explanation.model_basis}
-                </p>
-              </div>
-            )}
-
-            {/* Primary Factors */}
-            {explanation?.primary_factors && explanation.primary_factors.length > 0 && (
-              <div className="space-y-1.5">
-                <span className="text-[10px] font-mono text-text-muted uppercase tracking-wider block">
-                  Contributing Factors
-                </span>
-                <ul className="space-y-1 list-disc list-inside text-text-secondary">
-                  {explanation.primary_factors.map((factor, idx) => (
-                    <li key={idx} className="leading-relaxed">{factor}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {/* Supporting Observations */}
-            {explanation?.supporting_observations && explanation.supporting_observations.length > 0 && (
-              <div className="space-y-1.5">
-                <span className="text-[10px] font-mono text-text-muted uppercase tracking-wider block">
-                  Supporting Observations
-                </span>
-                <ul className="space-y-1 list-disc list-inside text-text-secondary">
-                  {explanation.supporting_observations.map((obs, idx) => (
-                    <li key={idx} className="leading-relaxed">{obs}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {/* Limitations */}
-            {explanation?.limitations && (
-              <div className="p-3 rounded border border-border bg-surface-secondary text-[11px] text-text-muted space-y-1">
-                <span className="font-mono text-[10px] uppercase tracking-wider block text-text-secondary">
-                  Technical Boundaries &amp; Limitations
-                </span>
-                <ul className="space-y-0.5 list-disc list-inside">
-                  {explanation.limitations.map((lim, idx) => (
-                    <li key={idx}>{lim}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
+            <p className="text-text-muted">
+              This is a probability-based result, not definitive proof of the image’s origin.
+            </p>
           </div>
         )}
       </div>

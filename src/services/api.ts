@@ -20,6 +20,21 @@ export async function checkHealth(): Promise<{ status: string; model_loaded: boo
   return res.json();
 }
 
+export async function getBackupSettings(): Promise<{ enabled: boolean; reference: string | null }> {
+  const res = await fetch(`${API_BASE}/settings/backup`, { headers: await getAuthHeaders() });
+  if (!res.ok) throw new Error("Failed to load Backup Mode settings");
+  return res.json();
+}
+
+export async function updateBackupSettings(enabled: boolean, reference: string | null): Promise<void> {
+  const res = await fetch(`${API_BASE}/settings/backup`, {
+    method: "PUT",
+    headers: { ...(await getAuthHeaders()), "Content-Type": "application/json" },
+    body: JSON.stringify({ enabled, reference }),
+  });
+  if (!res.ok) throw new Error("Failed to save Backup Mode settings");
+}
+
 export async function analyzeImage(file: File, groundTruth?: string): Promise<AnalysisResult> {
   const formData = new FormData();
   formData.append("file", file);

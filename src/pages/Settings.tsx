@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Moon, Sun, Shield, User, LogOut, CheckCircle, Sliders, ToggleLeft, ToggleRight } from "lucide-react";
 import { useAuth } from "../auth/useAuth";
 import { useNavigate } from "react-router-dom";
+import { getBackupSettings, updateBackupSettings } from "../services/api";
 
 interface SettingsProps {
   darkMode: boolean;
@@ -28,6 +29,18 @@ export const Settings: React.FC<SettingsProps> = ({ darkMode, setDarkMode }) => 
     if (groundTruth) localStorage.setItem("image_detection_ground_truth", groundTruth);
     else localStorage.removeItem("image_detection_ground_truth");
   }, [groundTruth]);
+
+  useEffect(() => {
+    getBackupSettings().then((data) => {
+      setEvaluationMode(data.enabled);
+      setGroundTruth(data.reference || "");
+    }).catch(() => undefined);
+  }, []);
+
+  const handleBackupModeChange = (enabled: boolean) => {
+    setEvaluationMode(enabled);
+    updateBackupSettings(enabled, enabled ? groundTruth || null : null).catch(() => undefined);
+  };
 
   const handleSignOut = async () => {
     await signOut();
@@ -116,7 +129,7 @@ export const Settings: React.FC<SettingsProps> = ({ darkMode, setDarkMode }) => 
 
             <button
               type="button"
-              onClick={() => setEvaluationMode(!evaluationMode)}
+              onClick={() => handleBackupModeChange(!evaluationMode)}
               className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded text-xs font-mono font-medium border transition-colors shrink-0 cursor-pointer ${
                 evaluationMode
                   ? "border-text-primary bg-surface-secondary text-text-primary"
@@ -137,7 +150,7 @@ export const Settings: React.FC<SettingsProps> = ({ darkMode, setDarkMode }) => 
               <p className="text-xs font-medium text-text-primary">Label for the next image</p>
               <div className="flex gap-2">
                 {[["real", "Real / Authentic"], ["ai_generated", "AI-Generated"]].map(([value, label]) => (
-                  <button key={value} type="button" onClick={() => setGroundTruth(value)} className={`px-3 py-2 rounded border text-xs font-medium ${groundTruth === value ? "border-text-primary bg-surface-secondary text-text-primary" : "border-border text-text-secondary"}`}>
+                  <button key={value} type="button" onClick={() => { setGroundTruth(value); updateBackupSettings(true, value); }} className={`px-3 py-2 rounded border text-xs font-medium ${groundTruth === value ? "border-text-primary bg-surface-secondary text-text-primary" : "border-border text-text-secondary"}`}>
                     {groundTruth === value ? "✓ " : ""}{label}
                   </button>
                 ))}

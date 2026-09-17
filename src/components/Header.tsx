@@ -1,7 +1,6 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { Menu, Moon, Sun } from "lucide-react";
-import { useAuth } from "../auth/useAuth";
 
 interface HeaderProps {
   darkMode: boolean;
@@ -15,7 +14,6 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenMobileMenu,
 }) => {
   const location = useLocation();
-  const { user, isAuthenticated } = useAuth();
 
   // Determine current page title
   const getPageTitle = (pathname: string): string => {
@@ -32,7 +30,6 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   const pageTitle = getPageTitle(location.pathname);
-  const userName = user?.user_metadata?.full_name || user?.user_metadata?.name || "User";
 
   return (
     <header className="sticky top-0 z-20 w-full h-14 border-b border-[var(--header-border)] bg-[var(--header-background)]/95 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between transition-colors">
@@ -64,25 +61,6 @@ export const Header: React.FC<HeaderProps> = ({
           {darkMode ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
         </button>
 
-        {/* User Avatar link */}
-        {isAuthenticated ? (
-          <Link
-            to="/settings"
-            className="flex items-center gap-2 h-8 px-2 rounded border border-border bg-surface hover:bg-surface-secondary transition-colors text-xs text-text-primary"
-            title="Settings & Account"
-          >
-            <div className="w-5 h-5 rounded-full bg-surface-secondary flex items-center justify-center text-[10px] font-mono font-medium text-text-primary border border-border">
-              {userName.charAt(0).toUpperCase()}
-            </div>
-          </Link>
-        ) : (
-          <Link
-            to="/login"
-            className="h-8 px-3 inline-flex items-center justify-center rounded text-xs font-medium border border-border bg-surface hover:bg-surface-secondary text-text-primary transition-colors"
-          >
-            Sign In
-          </Link>
-        )}
       </div>
 
     </header>

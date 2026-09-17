@@ -10,7 +10,7 @@ interface ResultCardProps {
 }
 
 export const ResultCard: React.FC<ResultCardProps> = ({ result, onAnalyzeAnother }) => {
-  const [explanationExpanded, setExplanationExpanded] = useState<boolean>(false);
+  const [explanationExpanded, setExplanationExpanded] = useState<boolean>(true);
   const [supportingExpanded, setSupportingExpanded] = useState<boolean>(false);
 
   const isAI = result.classification === "ai_generated";
@@ -27,6 +27,8 @@ export const ResultCard: React.FC<ResultCardProps> = ({ result, onAnalyzeAnother
 
   const explanation = result.explanation;
   const gradcam = result.gradcam || result.explanation;
+  const briefExplanation = explanation?.summary || result.interpretation;
+  const evidence = explanation?.primary_factors?.[0] || explanation?.supporting_observations?.[0];
 
   return (
     <div className="w-full max-w-2xl mx-auto space-y-8">
@@ -73,10 +75,15 @@ export const ResultCard: React.FC<ResultCardProps> = ({ result, onAnalyzeAnother
         </div>
 
         {explanationExpanded && (
-          <div className="space-y-4 text-xs text-text-secondary pt-2 border-t border-border">
+          <div className="space-y-3 text-sm text-text-secondary pt-2 border-t border-border">
             <p className="leading-relaxed text-text-primary font-medium">
-              {explanation?.summary || result.interpretation}
+              {briefExplanation}
             </p>
+            {evidence && (
+              <p className="leading-relaxed">
+                The main supporting signal was: {evidence}
+              </p>
+            )}
             <p className="text-text-muted">
               This is a probability-based result, not definitive proof of the image’s origin.
             </p>

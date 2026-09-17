@@ -76,7 +76,7 @@ export async function analyzeImage(file: File): Promise<AnalysisResult> {
   if (!res.ok || !json.success) {
     const message = res.status === 502 || res.status === 503
       ? "The analysis server is waking up or temporarily busy. Please wait a moment and try again."
-      : json?.error?.message || "Failed to analyze image";
+      : json?.error?.message || json?.detail?.message || json?.detail || "Failed to analyze image";
     throw new Error(message);
   }
 

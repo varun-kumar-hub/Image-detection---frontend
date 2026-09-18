@@ -103,7 +103,7 @@ export const Analyze: React.FC = () => {
             Analyze an Image
           </h1>
           <p className="text-xs sm:text-sm text-text-secondary mt-1.5">
-            Upload an image to inspect authenticity patterns and learned model representations.
+            Upload an image to inspect real and AI-generated patterns and learned model representations.
           </p>
         </div>
       )}
@@ -173,7 +173,7 @@ export const Analyze: React.FC = () => {
                       : "border border-border bg-surface text-text-secondary hover:text-text-primary"
                   }`}
                 >
-                  {groundTruth === "real" ? "✓ Real / Authentic" : "Real / Authentic"}
+                  {groundTruth === "real" ? "✓ Real" : "Real"}
                 </button>
                 <button
                   type="button"
@@ -215,7 +215,7 @@ export const Analyze: React.FC = () => {
                 onClick={() => handleSelectSample("real")}
                 className="px-2.5 py-1 rounded border border-border bg-surface-secondary text-text-primary hover:bg-border transition-colors font-mono text-[11px] cursor-pointer"
               >
-                Authentic image
+                Real image
               </button>
               <button
                 type="button"

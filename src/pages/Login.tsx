@@ -44,7 +44,7 @@ export const Login: React.FC = () => {
             </span>
           </div>
           <p className="text-sm text-text-secondary leading-relaxed">
-            Image authenticity <br />
+            Image detection <br />
             made simple.
           </p>
         </div>
@@ -89,7 +89,7 @@ export const Login: React.FC = () => {
           </button>
 
           <p className="text-[11px] text-text-muted leading-relaxed">
-            By continuing, you verify image authenticity with user-scoped isolation and private cloud storage.
+            By continuing, you analyze images with user-scoped isolation and private cloud storage.
           </p>
         </div>
 

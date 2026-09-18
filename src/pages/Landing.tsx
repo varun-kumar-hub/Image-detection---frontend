@@ -35,7 +35,7 @@ export const Landing: React.FC = () => {
     {
       icon: Shield,
       title: "Decisive Verdicts & Review State",
-      desc: "Provides calibrated thresholds: AI (>55%), Authentic (<45%), and a dedicated 'Needs Review' state for borderline inputs.",
+      desc: "Provides calibrated thresholds: AI (>55%), Real (<45%), and a dedicated 'Needs Review' state for borderline inputs.",
     },
     {
       icon: Database,
@@ -65,7 +65,7 @@ export const Landing: React.FC = () => {
         </div>
 
         <h1 className="text-xs font-mono uppercase tracking-widest text-text-muted mb-4">
-          IMAGE AUTHENTICITY
+          IMAGE DETECTION
         </h1>
 
         <h2 className="text-4xl sm:text-5xl font-semibold tracking-tight text-text-primary mb-6">
@@ -73,7 +73,7 @@ export const Landing: React.FC = () => {
         </h2>
 
         <p className="text-base sm:text-lg text-text-secondary max-w-xl mx-auto leading-relaxed mb-10">
-          Upload an image and receive a model prediction about whether it appears authentic or AI-generated, together with probability, confidence, and supporting analysis. Results are indicators—not absolute proof.
+          Upload an image and receive a model prediction about whether it appears Real or AI-generated, together with probability, confidence, and supporting analysis. Results are indicators—not absolute proof.
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3">

@@ -10,7 +10,7 @@ export const ProcessingSteps: React.FC<ProcessingStepsProps> = () => {
   const stepList = [
     "Image validated",
     "Image preprocessed",
-    "Running authenticity model",
+    "Running detection model",
     "Running supporting analysis",
     "Preparing result",
   ];

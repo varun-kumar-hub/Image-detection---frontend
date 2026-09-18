@@ -33,7 +33,7 @@ export const Dataset: React.FC = () => {
 
           <div className="space-y-2.5 font-mono text-xs pt-2">
             <div className="flex justify-between items-center p-2.5 rounded border border-border bg-surface-secondary">
-              <span className="text-text-secondary">Authentic (Real)</span>
+              <span className="text-text-secondary">Real</span>
               <span className="text-text-primary font-medium">8,803 (15.3%)</span>
             </div>
             <div className="flex justify-between items-center p-2.5 rounded border border-border bg-surface-secondary">
@@ -59,12 +59,12 @@ export const Dataset: React.FC = () => {
           </div>
 
           <p className="text-xs text-text-secondary leading-relaxed">
-            All 8,803 available authentic images were paired with an exact 8,803 deterministic random sample of synthetic images (seed=42), creating an unbiased foundation.
+            All 8,803 available real images were paired with an exact 8,803 deterministic random sample of synthetic images (seed=42), creating an unbiased foundation.
           </p>
 
           <div className="space-y-2.5 font-mono text-xs pt-2">
             <div className="flex justify-between items-center p-2.5 rounded border border-border bg-surface-secondary">
-              <span className="text-text-secondary">Authentic (Real)</span>
+              <span className="text-text-secondary">Real</span>
               <span className="text-text-primary font-medium">8,803 (50.0%)</span>
             </div>
             <div className="flex justify-between items-center p-2.5 rounded border border-border bg-surface-secondary">

@@ -12,13 +12,13 @@ A minimal, professional, production-ready web client for deep learning image aut
 - **Deep Learning Analysis Pipeline**:
   - Drag-and-drop / file selector with instant local thumbnail preview.
   - Asynchronous submission to FastAPI backend.
-  - Three-tier verdict classification: `Real / Authentic`, `AI-Generated`, or `Needs Review`.
+  - Three-tier verdict classification: `Real`, `AI-Generated`, or `Needs Review`.
 - **Structured Explanations**: Dedicated *"Why was this image classified this way?"* card breaking down model basis, primary factors, supporting signals, and limitations.
 - **Grad-CAM Model Focus**: Visual heatmap overlay displaying spatial regions that influenced the convolutional model's classification.
 - **Hidden Evaluation Mode**:
   - Accessible via `Settings -> Evaluation Mode` (default: OFF).
   - Designed for controlled benchmark testing.
-  - Allows selecting known image ground truth (`Real / Authentic` or `AI-Generated`).
+  - Allows selecting known image ground truth (`Real` or `AI-Generated`).
   - **Ground truth never enters the ML model**; it is evaluated strictly post-prediction to calculate classification correctness.
 - **Google OAuth Authentication**: Powered by Supabase Auth with persistent sessions, automatic token refresh, and multi-tab sync.
 - **PDF Report Generation**: Instant viewing and export of formal verification detection certificates.

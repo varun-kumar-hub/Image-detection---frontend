@@ -21,7 +21,7 @@ export const Model: React.FC = () => {
     { name: "Dropout (0.5)", detail: "Overfitting prevention" },
     { name: "Dense (128, ReLU)", detail: "Intermediate representation layer (32,896 params)" },
     { name: "Dropout (0.3)", detail: "Regularization" },
-    { name: "Dense (1, Sigmoid)", detail: "Probability output (0 = Authentic, 1 = AI-Generated)" },
+    { name: "Dense (1, Sigmoid)", detail: "Probability output (0 = Real, 1 = AI-Generated)" },
   ];
 
   return (

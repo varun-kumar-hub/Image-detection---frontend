@@ -20,7 +20,7 @@ export const ResultCard: React.FC<ResultCardProps> = ({ result, onAnalyzeAnother
     ? "AI-GENERATED"
     : isNeedsReview
     ? "NEEDS REVIEW"
-    : "REAL / AUTHENTIC";
+    : "REAL";
 
   const dominantPercent = isAI ? result.ai_probability : result.real_probability;
   const confidenceLabel = result.confidence.charAt(0).toUpperCase() + result.confidence.slice(1);
@@ -50,7 +50,7 @@ export const ResultCard: React.FC<ResultCardProps> = ({ result, onAnalyzeAnother
         </div>
         {isNeedsReview && (
           <p className="text-xs text-text-muted max-w-sm mx-auto pt-1">
-            The model did not produce a decisive signal between authentic and synthetic patterns.
+            The model did not produce a decisive signal between real and synthetic patterns.
           </p>
         )}
       </div>
@@ -110,13 +110,13 @@ export const ResultCard: React.FC<ResultCardProps> = ({ result, onAnalyzeAnother
             <div className="p-2 rounded bg-surface-secondary">
               <span className="text-text-muted text-[10px] block">Known Ground Truth</span>
               <span className="font-medium text-text-primary capitalize">
-                {result.ground_truth === "real" ? "Real / Authentic" : "AI-Generated"}
+                {result.ground_truth === "real" ? "Real" : "AI-Generated"}
               </span>
             </div>
             <div className="p-2 rounded bg-surface-secondary">
               <span className="text-text-muted text-[10px] block">Model Prediction</span>
               <span className="font-medium text-text-primary capitalize">
-                {result.classification === "real" ? "Real / Authentic" : "AI-Generated"}
+                {result.classification === "real" ? "Real" : "AI-Generated"}
               </span>
             </div>
           </div>
@@ -143,10 +143,10 @@ export const ResultCard: React.FC<ResultCardProps> = ({ result, onAnalyzeAnother
           </div>
         </div>
 
-        {/* Authentic Bar */}
+        {/* Real Bar */}
         <div className="space-y-1">
           <div className="flex justify-between items-center text-text-primary">
-            <span>Real / Authentic</span>
+            <span>Real</span>
             <span>{result.real_probability.toFixed(1)}%</span>
           </div>
           <div className="w-full h-2 rounded-full bg-surface-secondary overflow-hidden border border-border">

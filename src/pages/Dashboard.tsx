@@ -45,7 +45,7 @@ export const Dashboard: React.FC = () => {
         <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-text-primary">
           Good {new Date().getHours() < 12 ? "morning" : new Date().getHours() < 18 ? "afternoon" : "evening"}{user?.user_metadata?.name ? `, ${user.user_metadata.name.split(" ")[0]}` : ""}
         </h1>
-        <p className="text-base text-text-secondary">Review your image authenticity analyses and model results.</p>
+        <p className="text-base text-text-secondary">Review your image detection analyses and model results.</p>
       </div>
       
       {/* 1. Hero / Value Proposition */}
@@ -59,7 +59,7 @@ export const Dashboard: React.FC = () => {
             Image Detection
           </h1>
           <p className="text-base text-text-secondary leading-relaxed max-w-2xl">
-            Analyze an image to estimate whether it appears Real / Authentic or AI-Generated using learned visual representations. Results are indicators, not absolute proof.
+            Analyze an image to estimate whether it appears Real or AI-Generated using learned visual representations. Results are indicators, not absolute proof.
           </p>
           <div className="pt-3">
             <Link
@@ -85,11 +85,11 @@ export const Dashboard: React.FC = () => {
         </div>
 
         <div className="premium-card p-5 rounded-lg border border-border bg-surface space-y-2">
-          <div className="flex items-center justify-between"><span className="text-xs font-mono text-text-muted uppercase tracking-wider">Authentic Images</span><ImageIcon className="h-4 w-4 text-emerald-600 dark:text-emerald-400" /></div>
+          <div className="flex items-center justify-between"><span className="text-xs font-mono text-text-muted uppercase tracking-wider">Real Images</span><ImageIcon className="h-4 w-4 text-emerald-600 dark:text-emerald-400" /></div>
           <p className="text-3xl font-mono font-semibold text-text-primary">
             {isAuthenticated ? realCount : "—"}
           </p>
-          <p className="text-sm text-text-muted">Camera / authentic signal</p>
+          <p className="text-sm text-text-muted">Camera / real signal</p>
         </div>
 
         <div className="premium-card p-5 rounded-lg border border-border bg-surface space-y-2">
@@ -153,7 +153,7 @@ export const Dashboard: React.FC = () => {
         ) : recentItems.length === 0 ? (
           <div className="p-8 text-center rounded-lg border border-border bg-surface space-y-2">
             <p className="text-xs font-medium text-text-primary">No recent analyses yet</p>
-            <p className="text-xs text-text-muted">Upload an image to start evaluating authenticity.</p>
+            <p className="text-xs text-text-muted">Upload an image to start evaluating images.</p>
             <Link
               to="/analyze"
               className="inline-block mt-2 px-3 py-1 rounded text-xs font-medium bg-accent text-accent-contrast"
@@ -166,7 +166,7 @@ export const Dashboard: React.FC = () => {
             {recentItems.slice(0, 5).map((item) => {
               const isAI = item.classification === "ai_generated";
               const isReview = item.classification === "needs_review";
-              const label = isAI ? "AI Generated" : isReview ? "Needs Review" : "Authentic";
+              const label = isAI ? "AI Generated" : isReview ? "Needs Review" : "Real";
               const score = isAI ? item.ai_probability : item.real_probability;
 
               return (

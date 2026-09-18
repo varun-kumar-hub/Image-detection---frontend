@@ -79,7 +79,7 @@ export const History: React.FC = () => {
           {[
             { id: "all", label: "All" },
             { id: "ai_generated", label: "AI Generated" },
-            { id: "real", label: "Authentic" },
+            { id: "real", label: "Real" },
             { id: "needs_review", label: "Needs Review" },
           ].map((tab) => (
             <button
@@ -147,7 +147,7 @@ export const History: React.FC = () => {
                   const isAI = item.classification === "ai_generated";
                   const isReview = item.classification === "needs_review";
                   const score = isAI ? item.ai_probability : item.real_probability;
-                  const label = isAI ? "AI Generated" : isReview ? "Needs Review" : "Authentic";
+                  const label = isAI ? "AI Generated" : isReview ? "Needs Review" : "Real";
 
                   return (
                     <tr
@@ -234,7 +234,7 @@ export const History: React.FC = () => {
               const isAI = item.classification === "ai_generated";
               const isReview = item.classification === "needs_review";
               const score = isAI ? item.ai_probability : item.real_probability;
-              const label = isAI ? "AI GENERATED" : isReview ? "NEEDS REVIEW" : "AUTHENTIC";
+              const label = isAI ? "AI GENERATED" : isReview ? "NEEDS REVIEW" : "REAL";
 
               return (
                 <div

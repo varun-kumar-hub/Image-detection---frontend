@@ -176,7 +176,7 @@ export const Settings: React.FC<SettingsProps> = ({ darkMode, setDarkMode }) => 
             <div className="space-y-2">
               <p className="text-xs font-medium text-text-primary">Label for the next image</p>
               <div className="flex gap-2">
-                {[["real", "Real / Authentic"], ["ai_generated", "AI-Generated"]].map(([value, label]) => (
+                {[["real", "Real"], ["ai_generated", "AI-Generated"]].map(([value, label]) => (
                   <button key={value} type="button" onClick={() => { setGroundTruth(value); setBackupSaved(false); }} className={`px-3 py-2 rounded border text-xs font-medium ${groundTruth === value ? "border-text-primary bg-surface-secondary text-text-primary" : "border-border text-text-secondary"}`}>
                     {groundTruth === value ? "✓ " : ""}{label}
                   </button>
@@ -283,7 +283,7 @@ export const Settings: React.FC<SettingsProps> = ({ darkMode, setDarkMode }) => 
             • <b>Cascade Deletion:</b> Deleting any record from your History immediately removes both the analysis metadata and all associated cloud storage artifacts.
           </p>
           <p>
-            • <b>Responsible AI:</b> Image Detection predictions reflect probabilistic feature assessments and are not independent proof of authenticity.
+            • <b>Responsible AI:</b> Image Detection predictions reflect probabilistic feature assessments and are not independent proof of image origin.
           </p>
         </div>
       </section>

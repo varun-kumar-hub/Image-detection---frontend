@@ -71,6 +71,26 @@ export interface AnalysisResult {
     overlay_base64?: string;
     description?: string;
   };
+  feature_analysis?: {
+    embedding?: {
+      dimension?: number;
+      l2_norm?: number;
+      source_layer?: string;
+      note?: string;
+    };
+    preprocessing?: {
+      status?: string;
+      input_size?: string;
+      color_mode?: string;
+      value_range?: string;
+    };
+    image_statistics?: {
+      brightness_mean?: number;
+      contrast_std?: number;
+      edge_strength_mean?: number;
+    };
+    similarity?: { available?: boolean; note?: string };
+  };
   image_url?: string;
   thumbnail_url?: string;
   ground_truth?: string;

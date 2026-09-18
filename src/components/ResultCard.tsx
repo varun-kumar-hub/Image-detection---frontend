@@ -253,6 +253,25 @@ export const ResultCard: React.FC<ResultCardProps> = ({ result, onAnalyzeAnother
       </div>
 
       {/* 8. Supporting Analysis (Expandable) */}
+      {result.feature_analysis && (
+        <div className="rounded-lg border border-border bg-surface p-4 space-y-3">
+          <h3 className="text-xs font-mono uppercase tracking-wider text-text-primary font-medium">
+            Learned Feature Analysis
+          </h3>
+          <p className="text-sm text-text-secondary leading-relaxed">
+            The model represented this image with a {result.feature_analysis.embedding?.dimension || "learned"}-dimensional feature vector. These measurements describe model behavior; they are not human-readable labels such as “fake skin” or “artificial hair.”
+          </p>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+            <div className="p-2 rounded bg-surface-secondary"><span className="text-text-muted block">Preprocessing</span><span className="text-text-primary font-medium">{result.feature_analysis.preprocessing?.status || "MATCHED"}</span></div>
+            <div className="p-2 rounded bg-surface-secondary"><span className="text-text-muted block">Color</span><span className="text-text-primary font-medium">{result.feature_analysis.preprocessing?.color_mode || "RGB"}</span></div>
+            <div className="p-2 rounded bg-surface-secondary"><span className="text-text-muted block">Brightness</span><span className="text-text-primary font-medium">{result.feature_analysis.image_statistics?.brightness_mean ?? "—"}</span></div>
+            <div className="p-2 rounded bg-surface-secondary"><span className="text-text-muted block">Contrast</span><span className="text-text-primary font-medium">{result.feature_analysis.image_statistics?.contrast_std ?? "—"}</span></div>
+          </div>
+          <p className="text-xs text-text-muted">Feature similarity is unavailable until reference embeddings are configured.</p>
+        </div>
+      )}
+
+      {/* 8. Supporting Analysis (Expandable) */}
       <div className="rounded-lg border border-border bg-surface p-4 space-y-3">
         <div
           className="flex items-center justify-between cursor-pointer"
